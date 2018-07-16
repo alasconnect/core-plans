@@ -1,15 +1,18 @@
 pkg_name=dotnet-core-sdk
 pkg_origin=core
-pkg_version=2.0.3
-pkg_license=('MIT')
-pkg_upstream_url=https://www.microsoft.com/net/core
-pkg_description=".NET Core is a blazing fast, lightweight and modular platform
-  for creating web applications and services that run on Windows,
-  Linux and Mac."
+pkg_version=2.1.302
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
-pkg_source="https://download.microsoft.com/download/D/7/2/D725E47F-A4F1-4285-8935-A91AE2FCC06A/dotnet-sdk-${pkg_version}-linux-x64.tar.gz"
-pkg_shasum=6c4223094b1e3e93a466c6d91d3aa1053a3b2aef99b63bf45023bda3fca1aede
-pkg_filename="dotnet-dev-debian-x64.${pkg_version}.tar.gz"
+pkg_license=('MIT')
+pkg_description=".NET Core is a blazing fast, lightweight and modular platform \
+  for creating web applications and services that run on Windows, \
+  Linux and Mac."
+pkg_upstream_url="https://www.microsoft.com/net/core"
+pkg_source="https://dotnetcli.blob.core.windows.net/dotnet/Sdk/${pkg_version}/dotnet-sdk-${pkg_version}-linux-x64.tar.gz"
+pkg_shasum="2acaed79dfb54afd583a6316be63c4e497bad401e96477e4182a35960c4e1fa9"
+pkg_filename="dotnet-sdk-${pkg_version}-linux-x64.tar.gz"
+
+pkg_bin_dirs=(bin)
+
 pkg_deps=(
   core/coreutils
   core/curl
@@ -23,10 +26,10 @@ pkg_deps=(
   core/util-linux
   core/zlib
 )
+
 pkg_build_deps=(
   core/patchelf
 )
-pkg_bin_dirs=(bin)
 
 do_unpack() {
   # Extract into $pkg_dirname instead of straight into $HAB_CACHE_SRC_PATH.
@@ -48,17 +51,17 @@ do_build() {
   return 0
 }
 
-do_install() {
-  cp -a . "$pkg_prefix/bin"
-  chmod o+r -R "$pkg_prefix/bin"
-}
-
 do_check() {
   mkdir dotnet-new
   pushd dotnet-new
   ../dotnet new
   popd
   rm -rf dotnet-new
+}
+
+do_install() {
+  cp -a . "$pkg_prefix/bin"
+  chmod o+r -R "$pkg_prefix/bin"
 }
 
 do_strip() {
